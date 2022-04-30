@@ -1,0 +1,39 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.0",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^2.0.0",
+    "nodemailer": "^6.7.3",
+    "nodemailer-express-handlebars": "^5.0.0",
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.3",
+    "yup": "^0.32.11",
+    "swagger-autogen": "^2.11.2",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrickOtero/Green-Points-API.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PatrickOtero/Green-Points-API/issues"
+  },
+  "homepage": "https://github.com/PatrickOtero/Green-Points-API#readme",
+  "description": ""
+}

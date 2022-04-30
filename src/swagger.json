@@ -1,0 +1,134 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.5.0",
+    "title": "GreenPoints RESTful API prototype",
+    "description": "An API prototype to bring basic support for Green Points web-app front-end integration"
+  },
+  "host": "https://green-points-api.herokuapp.com",
+  "basePath": "/",
+  "schemes": ["http", "https"],
+  "paths": {
+    "/user/individual/login": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/individuals": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "individual_name": {
+                  "example": "any"
+                },
+                "individual_cpf": {
+                  "example": "any"
+                },
+                "individual_email": {
+                  "example": "any"
+                },
+                "individual_password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/company/login": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/companies": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "company_name": {
+                  "example": "any"
+                },
+                "company_description": {
+                  "example": "any"
+                },
+                "company_cnpj": {
+                  "example": "any"
+                },
+                "company_email": {
+                  "example": "any"
+                },
+                "company_password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}
