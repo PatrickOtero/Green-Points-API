@@ -9,8 +9,8 @@ const editCompanySchema = yup.object().shape({
   company_cnpj: yup
     .string()
     .required("O campo 'CNPJ' é obrigatório")
-    .min(9, 'Por favor, insira um CNPJ válido com 8 caracteres!')
-    .max(9, 'Por favor, insira um CNPJ válido com 8 caracteres!')
+    .min(18, 'Por favor, insira um CNPJ válido com 14 caracteres!')
+    .max(18, 'Por favor, insira um CNPJ válido com 14 caracteres!')
     .trim(),
   company_email: yup.string().required("O campo 'e-mail' é obrigatório").trim(),
   company_password: yup

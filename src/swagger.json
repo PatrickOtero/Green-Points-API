@@ -2,33 +2,49 @@
   "swagger": "2.0",
   "info": {
     "version": "0.5.0",
-    "title": "GreenPoints RESTful API prototype",
-    "description": "An API prototype to bring basic support for Green Points web-app front-end integration"
+    "title": "API SOLID RESTful básica para o web-app Green Points",
+    "description": "Neste protótipo, poucas funcionalidades foram deixadas prontas, como registro, login, edição e deleção tanto de pessoas físicas quanto de empresas e serviço de envio de e-mails para cada usuário de cada tipo no momento de registro através da biblioteca nodemailer. As funcionalidades de postagem de missões por parte das empresas, efetuação das mesmas por parte das pessoas físicas, interação de reações das pessoas físicas com as missões das empresas, sistema de pontos genéricos/exclusivos ao concluir missões, dentre outras funcionalidades estão previstas para serem implementadas caso a aplicação for continuada por qualquer motivo. Esta API foi arquitetada para oferecer a lógica back-end básica para fazer a solução ter sentido ao ser apresentada."
   },
-  "host": "https://green-points-api.herokuapp.com",
-  "basePath": "/docs",
+  "host": "http://localhost:3345",
+  "basePath": "/",
   "schemes": ["http", "https"],
   "paths": {
     "/user/individual/login": {
       "get": {
-        "description": "Requisição para efetuar login de pessoa física",
-        "parameters": [],
+        "description": "Requisição para efetuar login de pessoa física. O campo 'individual_emailOrCpf' é um campo que recebe dados do tipo 'string' e permite a inserção tanto do e-mail, que, apenas nessa requisição, não exige o formato correto de um e-mail, pois ele só validará o login se o exato mesmo dado referente ao e-mail for inserido, quanto do cpf cadastrado pela pessoa física, que segue a mesma lógica do e-mail. O campo 'individual_password' é o campo que receberá a senha cadastrada pela pessoa física e também aceita dados do tipo 'string'",
+        "parameters": [
+          {
+            "name": "Login",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "individual_emailOrCpf": {
+                  "example": "patrick@gmail.com/722.482.213-74"
+                },
+                "individual_password": {
+                  "example": "patrick@123"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK - Login foi efetuado com sucesso."
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request - Erro no formato de envio da requisição"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Credenciais não conferem"
           }
         }
       }
     },
     "/individuals": {
       "post": {
-        "description": "Requisição para o registro de novas pessoas físicas",
+        "description": "Requisição para o registro de novas pessoas físicas. 'individual_name' é onde será inserido o nome do usuário e aceita dados do tipo 'string' com até 100 caracteres (varchar(100). O campo 'individual_cpf' recebe dados do tipo 'string' com no mínimo e no máximo 14 caracteres para aceitar o cpf tratado com os pontos e o traço a partir do front-end que consome a API. 'individual_email' é onde o e-mail da pessoa física será inserido e aceita dados do tipo 'string' no formato devido de um e-mail. 'individual_password é onde será inserida a senha e também aceita dados do tipo 'string', sem limitações.",
         "parameters": [
           {
             "name": "body",
@@ -37,16 +53,16 @@
               "type": "object",
               "properties": {
                 "individual_name": {
-                  "example": "any"
+                  "example": "Marcos"
                 },
                 "individual_cpf": {
-                  "example": "any"
+                  "example": "324.546.234-43"
                 },
                 "individual_email": {
-                  "example": "any"
+                  "example": "marcos@gmail.com"
                 },
                 "individual_password": {
-                  "example": "any"
+                  "example": "marcos#321"
                 }
               }
             }
@@ -54,40 +70,56 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK - Pessoa física registrada com sucesso"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request - Formato da requisição inválido"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Dados sensíveis já existentes no banco de dados"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error - Erro interno do servidor."
           }
         }
       }
     },
     "/user/company/login": {
       "get": {
-        "description": "Requisição para o login de empresas",
-        "parameters": [],
+        "description": "Requisição para efetuar login de empresas. O campo 'company_emailOrCnpj' é um campo que recebe dados do tipo 'string' e permite a inserção tanto do e-mail, que, apenas nessa requisição, não exige o formato correto de um e-mail, pois ele só validará o login se o exato mesmo dado referente ao e-mail for inserido, quanto do cnpj cadastrado pela empresa, que segue a mesma lógica do e-mail. O campo 'company_password' é o campo que receberá a senha cadastrada pela empresa e também aceita dados do tipo 'string'",
+        "parameters": [
+          {
+            "name": "Login",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "company_emailOrCnpj": {
+                  "example": "sigtech@sig.com/34.123.543/0001-23"
+                },
+                "company_password": {
+                  "example": "sigtech@123"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK - Empresa logada com sucesso"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request - Erro no formato da requisição"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Credenciais de usuário inválidos"
           }
         }
       }
     },
     "/companies": {
       "post": {
-        "description": "Requisição para o registro de novas empresas",
+        "description": "Requisição para o registro de novas empresas. 'company_name' é onde será inserido o nome do usuário e aceita dados do tipo 'string' com até 100 caracteres (varchar(100). 'company_description' é onde será inserida a descrição desejada pela empresa e aceita dados do tipo 'string' com até 600 caracteres (varchar(600)). O campo 'company_cnpj' recebe dados do tipo 'string' com no mínimo e no máximo 18 caracteres para aceitar o cnpj tratado com os pontos, a barra lateral e o traço a partir do front-end que consome a API. 'company_email' é onde o e-mail da pessoa física será inserido e aceita dados do tipo 'string' no formato devido de um e-mail. 'company_password é onde será inserida a senha e também aceita dados do tipo 'string', sem limitações.",
         "parameters": [
           {
             "name": "body",
@@ -96,19 +128,19 @@
               "type": "object",
               "properties": {
                 "company_name": {
-                  "example": "any"
+                  "example": "GFG Tech"
                 },
                 "company_description": {
-                  "example": "any"
+                  "example": "GFG é uma empresa abençoada, por quê..."
                 },
                 "company_cnpj": {
-                  "example": "any"
+                  "example": "54.234.756/0001-32"
                 },
                 "company_email": {
-                  "example": "any"
+                  "example": "gfg@tech.com"
                 },
                 "company_password": {
-                  "example": "any"
+                  "example": "gfgtech@123"
                 }
               }
             }
@@ -116,16 +148,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK - Empresa foi cadastrada com sucesso."
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request - Requisição enviada em formato inválido"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Dados sensíveis inseridos já existentes no banco de dados"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error - Erro interno no servidor"
           }
         }
       }
