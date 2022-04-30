@@ -119,7 +119,7 @@
     },
     "/companies": {
       "post": {
-        "description": "Requisição para o registro de novas empresas. 'company_name' é onde será inserido o nome do usuário e aceita dados do tipo 'string' com até 100 caracteres (varchar(100). 'company_description' é onde será inserida a descrição desejada pela empresa e aceita dados do tipo 'string' com até 600 caracteres (varchar(600)). O campo 'company_cnpj' recebe dados do tipo 'string' com no mínimo e no máximo 18 caracteres para aceitar o cnpj tratado com os pontos, a barra lateral e o traço a partir do front-end que consome a API. 'company_email' é onde o e-mail da pessoa física será inserido e aceita dados do tipo 'string' no formato devido de um e-mail. 'company_password é onde será inserida a senha e também aceita dados do tipo 'string', sem limitações.",
+        "description": "Requisição para o registro de novas empresas. 'company_name' é onde será inserido o nome da empresa e aceita dados do tipo 'string' com até 100 caracteres (varchar(100). 'company_description' é onde será inserida a descrição desejada pela empresa e aceita dados do tipo 'string' com até 600 caracteres (varchar(600)). O campo 'company_cnpj' recebe dados do tipo 'string' com no mínimo e no máximo 18 caracteres para aceitar o cnpj tratado com os pontos, a barra lateral e o traço a partir do front-end que consome a API. 'company_email' é onde o e-mail da empresa será inserido e aceita dados do tipo 'string' no formato devido de um e-mail. 'company_password é onde será inserida a senha e também aceita dados do tipo 'string', sem limitações.",
         "parameters": [
           {
             "name": "body",
