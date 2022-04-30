@@ -6,7 +6,7 @@
     "description": "An API prototype to bring basic support for Green Points web-app front-end integration"
   },
   "host": "https://green-points-api.herokuapp.com",
-  "basePath": "/",
+  "basePath": "/docs",
   "schemes": ["http", "https"],
   "paths": {
     "/user/individual/login": {
