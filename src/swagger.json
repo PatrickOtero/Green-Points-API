@@ -11,7 +11,7 @@
   "paths": {
     "/user/individual/login": {
       "get": {
-        "description": "",
+        "description": "Requisição para efetuar login de pessoa física",
         "parameters": [],
         "responses": {
           "200": {
@@ -28,7 +28,7 @@
     },
     "/individuals": {
       "post": {
-        "description": "",
+        "description": "Requisição para o registro de novas pessoas físicas",
         "parameters": [
           {
             "name": "body",
@@ -70,7 +70,7 @@
     },
     "/user/company/login": {
       "get": {
-        "description": "",
+        "description": "Requisição para o login de empresas",
         "parameters": [],
         "responses": {
           "200": {
@@ -87,7 +87,7 @@
     },
     "/companies": {
       "post": {
-        "description": "",
+        "description": "Requisição para o registro de novas empresas",
         "parameters": [
           {
             "name": "body",
