@@ -6,7 +6,7 @@
 
 #### Para saber mais:
 
-- Visite este link onde a api está "deployada" para entender suas funcionalidades através de uma interface intuitiva gerada pela biblioteca "swagger-ui-express": https://green-points-api.herokuapp.com/docs/#/default
+- Visite este link onde a api está "deployada" para entender suas funcionalidades através de uma interface intuitiva gerada pelo módulo "swagger-ui-express": https://green-points-api.herokuapp.com/docs/#/default
 
 ---
 
