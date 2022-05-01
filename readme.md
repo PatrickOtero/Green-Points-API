@@ -8,7 +8,7 @@
 
 #### Para saber mais:
 
-- Visite este link onde a API está implantada para entender suas funcionalidades através de uma interface intuitiva gerada pelo módulo "swagger-ui-express": https://green-points-api.herokuapp.com/docs/#/default
+- Visite este link onde a API está implantada para entender suas funcionalidades através de uma interface intuitiva gerada pelos módulos "swagger-ui-express" e "swagger-autogen": https://green-points-api.herokuapp.com/docs/#/default
 
 ---
 
