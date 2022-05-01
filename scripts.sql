@@ -16,3 +16,17 @@ create table companies (
   	company_email text unique not null,
     company_password text not null
 );
+
+create table companyMissionPosts (
+	id serial primary key not null,
+  	mission_name varchar(50) unique not null,
+	mission_title varchar(100) unique not null,
+  	mission_description varchar(1000) unique not null,
+  	company_id int unique not null references companies (id)
+)
+
+create table missionUserLikes {
+	id serial not null,
+  	like_user_id int unique not null references individuals(id),
+	like_post_id int unique not null references companyMissionPosts(id),
+}

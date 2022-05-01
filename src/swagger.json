@@ -1,13 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "0.5.0",
+    "version": "0.9.0",
     "title": "API SOLID RESTful básica para o web-app Green Points",
-    "description": "Neste protótipo, poucas funcionalidades foram deixadas prontas, como registro, login, edição e deleção tanto de pessoas físicas quanto de empresas e serviço de envio de e-mails para cada usuário de cada tipo no momento de registro através da biblioteca nodemailer. As funcionalidades de postagem de missões por parte das empresas, efetuação das mesmas por parte das pessoas físicas, interação de reações das pessoas físicas com as missões das empresas, sistema de pontos genéricos/exclusivos ao concluir missões, dentre outras funcionalidades estão previstas para serem implementadas caso a aplicação for continuada por qualquer motivo. Esta API foi arquitetada para oferecer a lógica back-end básica para fazer a solução ter sentido ao ser apresentada."
+    "description": "[ATUALIZAÇÃO] - Versão 0.9.0: A Api agora é capaz de permitir que as empresas criem postagens de missões e também que as pessoas físicas consigam interagir minimanente através de uma reação simples (likes). É importante ressaltar que ainda não há suporte para upload de fotos. [ANTIGO] versão 0.5.0 - Neste protótipo, poucas funcionalidades foram deixadas prontas, como registro, login, edição e deleção tanto de pessoas físicas quanto de empresas e serviço de envio de e-mails para cada usuário de cada tipo no momento de registro através da biblioteca nodemailer. As funcionalidades de postagem de missões por parte das empresas, efetuação das mesmas por parte das pessoas físicas, interação de reações das pessoas físicas com as missões das empresas, sistema de pontos genéricos/exclusivos ao concluir missões, dentre outras funcionalidades estão previstas para serem implementadas caso a aplicação for continuada por qualquer motivo. Esta API foi arquitetada para oferecer a lógica back-end básica para fazer a solução ter sentido ao ser apresentada."
   },
-  "host": "https://green-points-api.herokuapp.com/",
+  "host": "localhost:3000",
   "basePath": "/",
-  "schemes": ["http", "https"],
+  "schemes": ["http"],
   "paths": {
     "/user/individual/login": {
       "get": {
@@ -42,7 +42,7 @@
         }
       }
     },
-    "/individuals": {
+    "/individuals/register": {
       "post": {
         "description": "Requisição para o registro de novas pessoas físicas. 'individual_name' é onde será inserido o nome do usuário e aceita dados do tipo 'string' com até 100 caracteres (varchar(100). O campo 'individual_cpf' recebe dados do tipo 'string' com no mínimo e no máximo 14 caracteres para aceitar o cpf tratado com os pontos e o traço a partir do front-end que consome a API. 'individual_email' é onde o e-mail da pessoa física será inserido e aceita dados do tipo 'string' no formato devido de um e-mail. 'individual_password é onde será inserida a senha e também aceita dados do tipo 'string', sem limitações.",
         "parameters": [
@@ -84,6 +84,172 @@
         }
       }
     },
+    "/individuals/edit": {
+      "put": {
+        "description": "Requisição para a edição de pessoas físicas já registradas. Os dados e restrições são as mesmas do endpoint de registro, porém, durante a requisição, todos os campos serão obrigatórios para que a requisição seja válida, com exeção do campo 'individual_password' que é a senha, que pode ou não ser alterada e enviada junto aos demais campos. A possibilidade de cancelar a alteração de dados estará limitada ao front-end da aplicação, através de interfaces simples de abertura e fechamento de modais.",
+        "parameters": [
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "individual_name": {
+                  "example": "Marcos"
+                },
+                "individual_cpf": {
+                  "example": "324.546.234-43"
+                },
+                "individual_email": {
+                  "example": "marcos@gmail.com"
+                },
+                "individual_password": {
+                  "example": "marcos#321"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Pessoa física editada com sucesso"
+          },
+          "400": {
+            "description": "Bad Request - Formato da requisição inválido ou token inválido"
+          },
+          "401": {
+            "description": "Unauthorized - Dados sensíveis já existentes no banco de dados"
+          },
+          "500": {
+            "description": "Internal Server Error - Erro interno do servidor."
+          }
+        }
+      }
+    },
+    "/individuals/delete": {
+      "delete": {
+        "description": "Requisição para a deleção de pessoas físicas. Não há nenhum parâmetro a ser passado neste endpoint devido ao sistema de validação desenvolvido com JWT para validar e inserir as informações do usuário logado em uma propriedade do servidor para uso em outras rotas necessárias, ou seja, nem mesmo um parâmetro de rota é necessário para efetuar esta requisição, basta que o usuário esteja logado para que ele efetue a deleção de sua própria conta. No front-end o id será obtido para armazenamento após a requisição de login de pessoas físicas.",
+        "parameters": [
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Pessoa física deletada com sucesso"
+          },
+          "400": {
+            "description": "Bad Request - Formato da requisição inválido ou token inválido"
+          },
+          "500": {
+            "description": "Internal Server Error - Erro interno do servidor."
+          }
+        }
+      }
+    },
+    "/individuals/missionLike/react/{missionId}": {
+      "post": {
+        "description": "Esta requisição permite a reação de uma pessoa física com uma postagem de missão feita por alguma empresa. Não há campos no corpo da requisição, é necessário apenas que seja informado o id da postagem de missão e que a pessoa física esteja logada",
+        "parameters": [
+          {
+            "name": "missionId - id da missão que receberá a reação",
+            "in": "path - parametro de caminho de rota",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - A reação foi registrada com sucesso"
+          },
+          "400": {
+            "description": "Bad Request - formato de recebimento de requisição inválido"
+          },
+          "401": {
+            "description": "Unauthorized - A pessoa física, de alguma forma, tenta reagir mais uma vez em uma postagem que já reagiu."
+          },
+          "404": {
+            "description": "Not Found - Caso o usuário, de alguma forma, tente reagir a uma postagem de missão que não existe mais."
+          },
+          "500": {
+            "description": "Internal Server Error - Erro interno de servidor."
+          }
+        }
+      }
+    },
+    "/individuals/missionLike/deleteReaction/{missionId}": {
+      "delete": {
+        "description": "Requisição onde é possível a remoção de uma reação por parte da interação do usuário na interface de reações de uma postagem de missão",
+        "parameters": [
+          {
+            "name": "missionId - id da missão da qual perderá a reação",
+            "in": "path - rota de parâmetro",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - a reação foi removida da missão com sucesso"
+          },
+          "400": {
+            "description": "Bad Request - recebimento de requisição em formato inválido"
+          },
+          "404": {
+            "description": "Not Found - caso a missão que perderá a reação, de alguma forma, não existir mais"
+          },
+          "500": {
+            "description": "Internal Server Error - erro interno de servidor"
+          }
+        }
+      }
+    },
+    "/individuals/missionsFeed/{limit}": {
+      "get": {
+        "description": "Requisição que será a responsável por exibir todas as postagens feitas por usuários do tipo empresa. No front-end será melhor definida a limitação da atuação da pessoa física, que será capaz de apenas reagir com 'likes' uma publicação",
+        "parameters": [
+          {
+            "name": "limit - valor que define o limite de postagens que aparecerão por vez no feed. Seu padrão é 5 (cinco) postagens de missão por vez.",
+            "in": "path - parâmetro de rota",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - A pessoa física conseguiu seu acesso ao conteúdo do feed."
+          },
+          "400": {
+            "description": "Bad Request - Recebimento de requisição em formato inválido"
+          },
+          "404": {
+            "description": "Not Found - Nenhuma postagem foi encontrada, neste caso, uma frase informativa será enviada e poderá ser utilizada no front-end para ser exibida no feed se desejado"
+          }
+        }
+      }
+    },
     "/user/company/login": {
       "get": {
         "description": "Requisição para efetuar login de empresas. O campo 'company_emailOrCnpj' é um campo que recebe dados do tipo 'string' e permite a inserção tanto do e-mail, que, apenas nessa requisição, não exige o formato correto de um e-mail, pois ele só validará o login se o exato mesmo dado referente ao e-mail for inserido, quanto do cnpj cadastrado pela empresa, que segue a mesma lógica do e-mail. O campo 'company_password' é o campo que receberá a senha cadastrada pela empresa e também aceita dados do tipo 'string'",
@@ -117,7 +283,7 @@
         }
       }
     },
-    "/companies": {
+    "/companies/register": {
       "post": {
         "description": "Requisição para o registro de novas empresas. 'company_name' é onde será inserido o nome da empresa e aceita dados do tipo 'string' com até 100 caracteres (varchar(100). 'company_description' é onde será inserida a descrição desejada pela empresa e aceita dados do tipo 'string' com até 600 caracteres (varchar(600)). O campo 'company_cnpj' recebe dados do tipo 'string' com no mínimo e no máximo 18 caracteres para aceitar o cnpj tratado com os pontos, a barra lateral e o traço a partir do front-end que consome a API. 'company_email' é onde o e-mail da empresa será inserido e aceita dados do tipo 'string' no formato devido de um e-mail. 'company_password é onde será inserida a senha e também aceita dados do tipo 'string', sem limitações.",
         "parameters": [
@@ -158,6 +324,243 @@
           },
           "500": {
             "description": "Internal Server Error - Erro interno no servidor"
+          }
+        }
+      }
+    },
+    "/companies/edit": {
+      "put": {
+        "description": "Requisição para a edição dos dados de uma empresa. De pouco se diferencia do endpoint de registro de empresa, as validações são as mesmas e os tipos de dados também. Durante a requisição, todos os dados são obrigatórios de serem inseridos, com exeção do campo 'company_password' que poderá ser aterado ou não junto aos demais campos e enviado no corpo da requisição.",
+        "parameters": [
+          {
+            "name": "authorization - é necessário um token válido para utilizar esta requisição",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "company_name": {
+                  "example": "GFG Tech"
+                },
+                "company_description": {
+                  "example": "GFG é uma empresa abençoada, por quê..."
+                },
+                "company_cnpj": {
+                  "example": "54.234.756/0001-32"
+                },
+                "company_email": {
+                  "example": "gfg@tech.com"
+                },
+                "company_password": {
+                  "example": "gfgtech@123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Empresa editada com sucesso."
+          },
+          "400": {
+            "description": "Bad Request - formato inválido no recebimento da requisição"
+          },
+          "401": {
+            "description": "Unauthorized - dados sensíveis já registrados por outras empresas"
+          },
+          "404": {
+            "description": "Not Found - Empresa para ser editada não encontrada"
+          },
+          "500": {
+            "description": "Internal Server Error - Erro interno de servidor"
+          }
+        }
+      }
+    },
+    "/companies/delete": {
+      "delete": {
+        "description": "Requisição para a deleção de empresas. Não há nenhum parâmetro a ser passado neste endpoint devido ao sistema de validação desenvolvido com JWT para validar e inserir as informações do usuário logado em uma propriedade do servidor para uso em outras rotas necessárias, ou seja, nem mesmo um parâmetro de rota é necessário para efetuar esta requisição, basta que a empresa esteja logada para que ela efetue a deleção de sua própria conta. No front-end o id será obtido para armazenamento após a requisição de login de empresas.",
+        "parameters": [
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - empresa deletada com sucesso"
+          },
+          "400": {
+            "description": "Bad Request - formato de recebimento inválido na requisição"
+          },
+          "404": {
+            "description": "Not Found - a empresa, de alguma forma, não existe mais, apesar de ainda ser capaz de acessar a rota de deleção empresas."
+          },
+          "500": {
+            "description": "Internal Server Error - erro interno de servidor"
+          }
+        }
+      }
+    },
+    "/companies/missions/create": {
+      "post": {
+        "description": "Requisição que permite que uma empresa crie uma postagem de missão. O campo 'mission_name' é onde será inserido o nome da missão, com limite de 50 caracteres (varchar(50)). O campo 'mission_title' é onde será inserido o título da missão, com o limite de 100 caracteres (varchar(100)). O campo 'mission_description' é onde será inserida a descrição da missão, com o limite de 1000 caracteres (varchar(1000)). Todos os campos do corpo desta requisição são to tipo 'string'.",
+        "parameters": [
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mission_name": {
+                  "example": "Recicla+"
+                },
+                "mission_title": {
+                  "example": "Quanto mais recicla, menos suja fica sua cidade"
+                },
+                "mission_description": {
+                  "example": "Precisamos de pessoas que queiram fazer a diferença em levar para o posto de coleta ReciclaAqui 10 kg de lixo eletrônico cada. No total, precisamos de 50 pessoas. Cada pessoa receberá 400 pontos genéricos por esta entrega"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Missão foi criada e postada com sucesso"
+          },
+          "400": {
+            "description": "Bad Request - formato de recebimento de requisição inválido"
+          },
+          "401": {
+            "description": "Unauthorized - dados da missão que está sendo criada já existir em outra postagem"
+          },
+          "500": {
+            "description": "Internal Server Error - Erro interno de servidor"
+          }
+        }
+      }
+    },
+    "/companies/missions/edit/{missionId}": {
+      "put": {
+        "description": "Requisição para a edição dos dados de uma missão. De pouco se diferencia do endpoint de criação de missão, as validações são as mesmas e os tipos de dados também. Durante a requisição, todos os dados são obrigatórios de serem inseridos. A opção de cancelar a alteração ficará limitada para ser implementada no front-end da aplicação",
+        "parameters": [
+          {
+            "name": "missionId - id da missão que será editada.",
+            "in": "path - parâmetro de rota",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mission_name": {
+                  "example": "Transformer Trash!"
+                },
+                "mission_title": {
+                  "example": "Vamos dar uma nova utilidade para seu lixo eletrônico!"
+                },
+                "mission_description": {
+                  "example": "Está afim de fazer parte dessa missão de diminuir a quantidade de lixo eletrônico o máximo que puder na sua casa e no seu bairro? Então você vai ser dar muito bem com essa missão, pois estamos aceitando 30kg de lixo metálico e eletrônico no posto de coleta TecRecycle. Cada pessoa que trouxer 50kg ganhará 1000 PG"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Missão editada com sucesso"
+          },
+          "400": {
+            "description": "Bad Request - formato de recebimento de requisição em formato inválido"
+          },
+          "401": {
+            "description": "Unauthorized - caso os dados novos a serem postos no lugar dos antigos sejam dados já existentes em outras postagens de missão"
+          },
+          "404": {
+            "description": "Not Found - caso a postagem que está sob tentativa de alteração não exista mais"
+          },
+          "500": {
+            "description": "Internal Server Error - erro interno de servidor"
+          }
+        }
+      }
+    },
+    "/companies/missions/delete/{missionId}": {
+      "delete": {
+        "description": "Requisição para a deleção de missões. Neste caso, não há a necessidade de parâmetro de rota referente à empresa logada, mas sim referente à missão sob tentativa de exclusão, apenas. No front-end o id será obtido através de métodos referentes às funcionalidades da empresa.",
+        "parameters": [
+          {
+            "name": "missionId - id da missão a ser excluída",
+            "in": "path - parâmetro de rota",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - a missão foi removida com sucesso"
+          },
+          "400": {
+            "description": "Bad Request - recebimento de requisição em formato inválido"
+          },
+          "404": {
+            "description": "Not Found - caso a missão a ser deletada, de alguma forma, não exista mais"
+          },
+          "500": {
+            "description": "Internal Server Error -  Erro interno de servidor"
+          }
+        }
+      }
+    },
+    "/companies/missionsFeed/{limit}": {
+      "get": {
+        "description": "Requisição que será a responsável por exibir todas as postagens feitas por usuários do tipo empresa. No front-end será melhor definida a limitação da atuação da pessoa física, que será capaz de apenas reagir com 'likes' uma publicação. OBS: Requisição redundante devido à minha limitação de conhecimento no que tange à limitação de usuários não cadastrados para acessar o feed da aplicação, pois, a ideia é que apenas após se registrar e logar é que os usuários, de ambos os tipos, serão capazes de visualizar o feed, portanto, eu dupliquei a rota (o caminho da rota, pois, o controlador é o mesmo) para receber o token de cada tipo de usuário e assim permitir apenas os mesmos após o login",
+        "parameters": [
+          {
+            "name": "limit - valor que define o limite de postagens que aparecerão por vez no feed. Seu padrão é 5 (cinco) postagens de missão por vez.",
+            "in": "path - parâmetro de rota",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization - é necessário um token válido para acessar este endpoint",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - A pessoa física conseguiu seu acesso ao conteúdo do feed."
+          },
+          "400": {
+            "description": "Bad Request - Recebimento de requisição em formato inválido"
+          },
+          "404": {
+            "description": "Not Found - Nenhuma postagem foi encontrada, neste caso, uma frase informativa será enviada e poderá ser utilizada no front-end para ser exibida no feed se desejado"
           }
         }
       }
