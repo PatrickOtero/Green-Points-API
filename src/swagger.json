@@ -5,7 +5,7 @@
     "title": "API SOLID RESTful básica para o web-app Green Points",
     "description": "[ATUALIZAÇÃO] - Versão 0.9.0: A Api agora é capaz de permitir que as empresas criem postagens de missões e também que as pessoas físicas consigam interagir minimanente através de uma reação simples (likes). É importante ressaltar que ainda não há suporte para upload de fotos. [ANTIGO] versão 0.5.0 - Neste protótipo, poucas funcionalidades foram deixadas prontas, como registro, login, edição e deleção tanto de pessoas físicas quanto de empresas e serviço de envio de e-mails para cada usuário de cada tipo no momento de registro através da biblioteca nodemailer. As funcionalidades de postagem de missões por parte das empresas, efetuação das mesmas por parte das pessoas físicas, interação de reações das pessoas físicas com as missões das empresas, sistema de pontos genéricos/exclusivos ao concluir missões, dentre outras funcionalidades estão previstas para serem implementadas caso a aplicação for continuada por qualquer motivo. Esta API foi arquitetada para oferecer a lógica back-end básica para fazer a solução ter sentido ao ser apresentada."
   },
-  "host": "localhost:3000",
+  "host": "https://green-points-api.herokuapp.com/",
   "basePath": "/",
   "schemes": ["http"],
   "paths": {

@@ -26,6 +26,16 @@ const {
 
 const routes = Router()
 
+//Routes that dont need authentication:
+
+// Individuals
+routes.get('/user/individual/login', individualLogin)
+routes.post('/individuals/register', individualRegistration)
+
+// Companies
+routes.get('/user/company/login', companyLogin)
+routes.post('/companies/register', companyRegistration)
+
 // Login Validation Middlewares
 routes.use('/individuals', individualValidation)
 routes.use('/companies', companyValidation)
@@ -33,8 +43,6 @@ routes.use('/companies', companyValidation)
 // Users
 
 // Individuals
-routes.get('/user/individual/login', individualLogin)
-routes.post('/individuals/register', individualRegistration)
 routes.put('/individuals/edit', individualEdit)
 routes.delete('/individuals/delete', individualDeletion)
 
@@ -49,8 +57,6 @@ routes.delete(
 routes.get('/individuals/missionsFeed/:limit', missionPostsFeed)
 
 // Companies
-routes.get('/user/company/login', companyLogin)
-routes.post('/companies/register', companyRegistration)
 routes.put('/companies/edit', companyEdit)
 routes.delete('/companies/delete', companyDeletion)
 

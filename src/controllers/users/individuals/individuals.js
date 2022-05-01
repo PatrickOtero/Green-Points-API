@@ -7,6 +7,10 @@ const {
   editIndividualSchema,
 } = require('../../../validations/individuals/editIndividualSchema')
 const { individualGreetingsEmail } = require('../../data/emails')
+const {
+  createIndividualInfoValidator,
+  editIndividualInfoValidator,
+} = require('../usersFunctions/individualsHelpers')
 
 const individualRegistration = async (req, res) => {
   const {
@@ -18,23 +22,9 @@ const individualRegistration = async (req, res) => {
   try {
     await createIndividualSchema.validate(req.body)
 
-    const isRepeatedEmail = await knex('individuals')
-      .where({ individual_email })
-      .first()
+    const errorMessage = await createIndividualInfoValidator(req.body)
 
-    if (isRepeatedEmail)
-      return res.status(401).json({
-        message: 'O e-mail inserido já está sendo usado por outro usuário',
-      })
-
-    const isRepeatedCpf = await knex('individuals')
-      .where({ individual_cpf })
-      .first()
-
-    if (isRepeatedCpf)
-      return res.status(401).json({
-        message: 'O cpf inserido já está sendo usado por outro usuário',
-      })
+    if (errorMessage) return res.status(401).json({ errorMessage })
 
     const encryptedPassword = await bcrypt.hash(individual_password, 10)
 
@@ -71,25 +61,9 @@ const individualEdit = async (req, res) => {
   try {
     await editIndividualSchema.validate(req.body)
 
-    const isRepeatedEmail = await knex('individuals')
-      .whereNot({ id })
-      .where({ individual_email })
-      .first()
+    const errorMessage = await editIndividualInfoValidator(req.body, id)
 
-    if (isRepeatedEmail)
-      return res.status(401).json({
-        message: 'O e-mail inserido já está sendo usado por outro usuário',
-      })
-
-    const isRepeatedCpf = await knex('individuals')
-      .whereNot({ id })
-      .where({ individual_cpf })
-      .first()
-
-    if (isRepeatedCpf)
-      return res.status(401).json({
-        message: 'O cpf inserido já está sendo usado por outro usuário',
-      })
+    if (errorMessage) return res.status(401).json({ errorMessage })
 
     if (individual_password) {
       if (individual_password.length < 5)

@@ -7,6 +7,10 @@ const {
 const knex = require('../../../connection')
 const bcrypt = require('bcrypt')
 const { companyGreetingsEmail } = require('../../data/emails')
+const {
+  createCompanyInfoValidator,
+  editCompanyInfoValidator,
+} = require('../usersFunctions/campaniesHelpers')
 
 const companyRegistration = async (req, res) => {
   const {
@@ -19,23 +23,9 @@ const companyRegistration = async (req, res) => {
   try {
     await createCompanySchema.validate(req.body)
 
-    const isRepeatedCnpj = await knex('companies')
-      .where({ company_cnpj })
-      .first()
+    const errorMessage = await createCompanyInfoValidator(req.body)
 
-    if (isRepeatedCnpj)
-      return res.status(401).json({
-        message: 'O CNPJ inserido pertence à outra empresa',
-      })
-
-    const isRepeatedEmail = await knex('companies')
-      .where({ company_email })
-      .first()
-
-    if (isRepeatedEmail)
-      return res.status(401).json({
-        message: 'O e-mail inserido pertence à outra empresa',
-      })
+    if (errorMessage) return res.status(401).json({ errorMessage })
 
     const encryptedPassword = await bcrypt.hash(company_password, 10)
 
@@ -73,25 +63,9 @@ const companyEdit = async (req, res) => {
   try {
     await editCompanySchema.validate(req.body)
 
-    const isRepeatedEmail = await knex('companies')
-      .whereNot({ id })
-      .where({ company_email })
-      .first()
+    const errorMessage = await editCompanyInfoValidator(req.body, id)
 
-    if (isRepeatedEmail)
-      return res.status(401).json({
-        message: 'O e-mail inserido pertence à outra empresa',
-      })
-
-    const isRepeatedCnpj = await knex('companies')
-      .whereNot({ id })
-      .where({ company_cnpj })
-      .first()
-
-    if (isRepeatedCnpj)
-      return res.status(401).json({
-        message: 'O cnpj inserido pertence à outra empresa',
-      })
+    if (errorMessage) return res.status(401).json({ errorMessage })
 
     if (company_password) {
       if (company_password.length < 5)
