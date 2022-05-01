@@ -5,19 +5,20 @@ const createCompanyInfoValidator = async (body) => {
 
   const isRepeatedCnpj = await knex('companies').where({ company_cnpj }).first()
 
-  if (isRepeatedCnpj)
-    return res.status(401).json({
-      message: 'O CNPJ inserido pertence à outra empresa',
-    })
+  if (isRepeatedCnpj) return 'O CNPJ inserido pertence à outra empresa'
 
   const isRepeatedEmail = await knex('companies')
     .where({ company_email })
     .first()
 
-  if (isRepeatedEmail)
-    return res.status(401).json({
-      message: 'O e-mail inserido pertence à outra empresa',
-    })
+  if (isRepeatedEmail) return 'O e-mail inserido pertence à outra empresa'
+
+  const isRepeatedEmailOnIndividuals = await knex('individuals')
+    .where({ individual_email: company_email })
+    .first()
+
+  if (isRepeatedEmailOnIndividuals)
+    return 'O e-mail inserido já está sendo usado por outro usuário'
 }
 
 const editCompanyInfoValidator = async (body, id) => {
@@ -28,20 +29,21 @@ const editCompanyInfoValidator = async (body, id) => {
     .where({ company_email })
     .first()
 
-  if (isRepeatedEmail)
-    return res.status(401).json({
-      message: 'O e-mail inserido pertence à outra empresa',
-    })
+  if (isRepeatedEmail) return 'O e-mail inserido pertence à outra empresa'
 
   const isRepeatedCnpj = await knex('companies')
     .whereNot({ id })
     .where({ company_cnpj })
     .first()
 
-  if (isRepeatedCnpj)
-    return res.status(401).json({
-      message: 'O cnpj inserido pertence à outra empresa',
-    })
+  if (isRepeatedCnpj) return 'O cnpj inserido pertence à outra empresa'
+
+  const isRepeatedEmailOnIndividuals = await knex('individuals')
+    .where({ individual_email: company_email })
+    .first()
+
+  if (isRepeatedEmailOnIndividuals)
+    return 'O e-mail inserido já está sendo usado por outro usuário'
 }
 
 module.exports = { createCompanyInfoValidator, editCompanyInfoValidator }

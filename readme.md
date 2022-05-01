@@ -1,4 +1,6 @@
-## API SOLID RESTful básica para o web-app Green Points.
+## API SOLID RESTful
+
+- Back-end simples para o web-app Green Points.
 
 ---
 
@@ -6,7 +8,7 @@
 
 #### Para saber mais:
 
-- Visite este link onde a api está "deployada" para entender suas funcionalidades através de uma interface intuitiva gerada pelo módulo "swagger-ui-express": https://green-points-api.herokuapp.com/docs/#/default
+- Visite este link onde a API está implantada para entender suas funcionalidades através de uma interface intuitiva gerada pelo módulo "swagger-ui-express": https://green-points-api.herokuapp.com/docs/#/default
 
 ---
 
@@ -15,4 +17,4 @@
   > Node.js, Javascript e PostgreSQL
 
 - Bibliotecas principais:
-  > Express.js, Node-postgres, Knex.js, Nodemailer.js, Bcrypt, Jsonwebtoken e Yup.
+  > Express.js, Node-postgres (pg), Knex.js, Nodemailer.js, Bcrypt, Jsonwebtoken e Yup.

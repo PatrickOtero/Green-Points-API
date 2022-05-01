@@ -8,18 +8,21 @@ const createIndividualInfoValidator = async (body) => {
     .first()
 
   if (isRepeatedEmail)
-    return res.status(401).json({
-      message: 'O e-mail inserido já está sendo usado por outro usuário',
-    })
+    return 'O e-mail inserido já está sendo usado por outro usuário'
+
+  const isRepeatedEmailOnCompanies = await knex('companies')
+    .where({ company_email: individual_email })
+    .first()
+
+  if (isRepeatedEmailOnCompanies)
+    return 'O e-mail inserido já está sendo usado por outro usuário'
 
   const isRepeatedCpf = await knex('individuals')
     .where({ individual_cpf })
     .first()
 
   if (isRepeatedCpf)
-    return res.status(401).json({
-      message: 'O cpf inserido já está sendo usado por outro usuário',
-    })
+    return 'O cpf inserido já está sendo usado por outro usuário'
 }
 
 const editIndividualInfoValidator = async (body, id) => {
@@ -31,9 +34,14 @@ const editIndividualInfoValidator = async (body, id) => {
     .first()
 
   if (isRepeatedEmail)
-    return res.status(401).json({
-      message: 'O e-mail inserido já está sendo usado por outro usuário',
-    })
+    return 'O e-mail inserido já está sendo usado por outro usuário'
+
+  const isRepeatedEmailOnCompanies = await knex('companies')
+    .where({ company_email: individual_email })
+    .first()
+
+  if (isRepeatedEmailOnCompanies)
+    return 'O e-mail inserido já está sendo usado por outro usuário'
 
   const isRepeatedCpf = await knex('individuals')
     .whereNot({ id })
@@ -41,9 +49,7 @@ const editIndividualInfoValidator = async (body, id) => {
     .first()
 
   if (isRepeatedCpf)
-    return res.status(401).json({
-      message: 'O cpf inserido já está sendo usado por outro usuário',
-    })
+    return 'O cpf inserido já está sendo usado por outro usuário'
 }
 
 module.exports = { createIndividualInfoValidator, editIndividualInfoValidator }

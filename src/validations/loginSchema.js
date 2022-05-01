@@ -1,12 +1,5 @@
 const yup = require('./schemasConfig')
 
-const mainLoginSchema = yup.object().shape({
-  user_type: yup
-    .string()
-    .required('É necessário escolher seu tipo de usuário.')
-    .trim(),
-})
-
 const individualLoginSchema = yup.object().shape({
   individual_emailOrCpf: yup
     .string()
@@ -29,4 +22,4 @@ const companyLoginSchema = yup.object().shape({
     .trim(),
 })
 
-module.exports = { mainLoginSchema, individualLoginSchema, companyLoginSchema }
+module.exports = { individualLoginSchema, companyLoginSchema }
