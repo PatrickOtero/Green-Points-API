@@ -18,3 +18,8 @@
 
 - Bibliotecas principais:
   > Express.js, Node-postgres (pg), Knex.js, Nodemailer.js, Bcrypt, Jsonwebtoken e Yup.
+
+ ## Caso prefira testar localmente:
+    - 1° - Clone o repositório localmente
+    - 2° - Execute o comando no diretório raíz (onde está localizada a pasta src): "npm i" ou "yarn"
+    - 3° - Execute o comando "npm run dev" ou "yarn dev"
